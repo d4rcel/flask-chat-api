@@ -2,6 +2,6 @@
 # -*- coding: utf-8 -*-
 # standard python imports
 
-from flask_pymongo import PyMongo
+from flask_mongoengine import MongoEngine
 
-mysql_mongodb_client = PyMongo()
+mongodb_client = MongoEngine()

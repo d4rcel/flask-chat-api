@@ -5,8 +5,6 @@ from app.http.requests.register.register_request import UsernameSchema, EmailSch
 from app.models.users.user_model import User, BlockedDevice
 from flask_jwt_extended import create_access_token
 import datetime
-from app.jobs.register.register_tasks import register_job
-from sqlalchemy import or_
 from redis_client import username_redis_client, mail_redis_client
 from app.jobs.graylog.graylog_tasks import send_message_to_sqs_job
 
@@ -171,82 +169,30 @@ def register(request, input_data):
         errors = create_validation_schema.validate(input_data)
         
         if errors:
-            
-            # json_request = request_to_json(
-            #     request=request,
-            #     status=HTTP_400_BAD_REQUEST,
-            #     input_data=input_data,
-            #     message="Validation failed",
-            #     response_data=errors
-            # )
-            # send_message_to_sqs_job.delay(json_request)
-                
+                            
             return generate_response(message=errors)
     
-        check_user = db_session_master.query(User.id).filter(
-            or_(
-                User.username==input_data.get('username'),
-                User.email==input_data.get('email')
-            )
-        ).first()
+        # check_user = db_session_master.query(User.id).filter(
+        #     or_(
+        #         User.username==input_data.get('username'),
+        #         User.email==input_data.get('email')
+        #     )
+        # ).first()
 
         # db_session_slave.commit()
-        if check_user is None:
-            new_user = User(**input_data)  
-            db_session_master.add(new_user)
-            db_session_master.commit()
-            
-            token = create_access_token(new_user.id,expires_delta=datetime.timedelta(days=365))
-            
-            user = new_user.to_json()
-            
-            data = {
-                'token' : token,
-                'user': user,
-            }
-            
-            register_job.delay({
-                'user': user,
-                'device_id' : input_data.get('device_id'),
-                'hardware_device_id' : input_data.get('hardware_device_id')
-            })
-            
-            # json_request = request_to_json(
-            #     request=request,
-            #     status=HTTP_201_CREATED,
-            #     input_data=input_data,
-            #     message="User Created",
-            #     response_data=data
-            # )
-            # send_message_to_sqs_job.delay(json_request)
+        # if check_user is None:
+        #     
+        new_user = User(**input_data)  
+        
+        user = new_user.to_json()
                     
-            return generate_response(
-                data=data, message="User Created", status=HTTP_201_CREATED
-            )
+        return generate_response(
+            data=user, message="User Created", status=HTTP_201_CREATED
+        )
             
-        else:
-            # json_request = request_to_json(
-            #     request=request,
-            #     status=HTTP_400_BAD_REQUEST,
-            #     input_data=input_data,
-            #     message="Username or email already exists"
-            # )
-            # send_message_to_sqs_job.delay(json_request)
-            
-            db_session_master.commit()
-            return generate_response(message="Username or email already exists", status=HTTP_400_BAD_REQUEST)
     except Exception as e:
         
         error_message =  str(e)
-        
-        json_request = request_to_json(
-            request=request,
-            status=HTTP_500_INTERNAL_SERVER_ERROR,
-            input_data=input_data,
-            message=error_message
-        )
-         
-        send_message_to_sqs_job.delay(json_request)
         
         return generate_response(
             message=error_message, status=HTTP_200_OK

@@ -18,26 +18,13 @@ class Config:
     FLASK_ENV = env.get("FLASK_ENV")
 
     # Database
-    SQLALCHEMY_DATABASE_WRITE = env.get("SQLALCHEMY_DATABASE_WRITE")
-    SQLALCHEMY_DATABASE_READ = env.get("SQLALCHEMY_DATABASE_READ")
-    SQLALCHEMY_ECHO = False
-    SQLALCHEMY_TRACK_MODIFICATIONS = False
-    SQLALCHEMY_POOL_SIZE=30
-    SQLALCHEMY_POOL_TIMEOUT=300
-    
-    SQLALCHEMY_ENGINE_OPTIONS = {
-        'pool_recycle': 3600,
-        'pool_timeout': 30,
-        'pool_pre_ping': True,
-        'pool_size': 10,
-        'isolation_level': 'READ UNCOMMITTED'
+    MONGO_URI = env.get('MONGO_URI')
+    MONGODB_SETTINGS = {
+        'db': env.get('MONGO_DB_NAME'),
+        'host': env.get('MONGO_DB_HOST'),
+        'port': int(env.get('MONGO_DB_PORT')),
     }
     
-    SQLALCHEMY_BINDS = {
-        'slaves': env.get("SQLALCHEMY_DATABASE_READ")
-    }
-    
-    MYSQL_MONGO_URI = env.get('MONGO_MYSQL_URI')
     #JWT
     JWT_SECRET_KEY = env.get("JWT_SECRET")
     JWT_ALGO = env.get("JWT_ALGO")

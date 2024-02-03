@@ -1,46 +1,32 @@
 from marshmallow import Schema, fields, validate, ValidationError, validates_schema
 
-class SendResetPasswordCodeSchema(Schema):
+class CreateUserSchema(Schema):
     
-    email = fields.Email(required=False)
-    phone_number = fields.String(required=False)
+    firstname = fields.String(required=True,validate=validate.Length(min=1,max=255))
+    lastname = fields.String(required=False,validate=validate.Length(max=255))
+    email = fields.Email(required=True)
+    password = fields.String(required=True,validate=validate.Length(min=8,max=255))
     
-    @validates_schema
-    def validate_email_or_phone_number(self, data, **kwargs):
-        if data.get('email') is None and data.get('phone_number') is None: 
-            raise ValidationError("The phone number field is required when email is not present.")
-        
-class CheckResetPasswordCodeSchema(Schema):
     
-    email = fields.Email(required=False)
-    phone_number = fields.String(required=False)
-    code = fields.Integer(required=True)
+class SearchUserInputSchema(Schema):
     
-    @validates_schema
-    def validate_email_or_phone_number(self, data, **kwargs):
-        if data.get('email') is None and data.get('phone_number') is None: 
-            raise ValidationError("The phone number field is required when email is not present.")
-        
-class ResetPasswordSchema(Schema):
+    search = fields.String(
+        required = False, 
+        allow_none=True, 
+        validate=[
+            # validate.Length(min=1,max=255),
+            validate.Regexp(regex="^[a-zA-Z0-9_.-]*$")
+        ]
+    )
+    page = fields.Integer(required=False)
     
-    email = fields.Email(required=False)
-    phone_number = fields.String(required=False)
-    code = fields.Integer(required=True)
-    password = fields.String(required=True)
-    
-    @validates_schema
-    def validate_email_or_phone_number(self, data, **kwargs):
-        if data.get('email') is None and data.get('phone_number') is None: 
-            raise ValidationError("The phone number field is required when email is not present.")
-        
-class VerifyEmailCodeSchema(Schema):
-    
-    code = fields.Integer(required=True)
 
-class UpdateDeviceIdInputSchema(Schema):
+class EditUserSchema(Schema):
     
-    device_id = fields.Str(required=True)
+    firstname = fields.String(required=False,validate=validate.Length(min=1,max=255))
+    lastname = fields.String(required=False,validate=validate.Length(max=255))
+    email = fields.Email(required=True)
+    status = fields.String(required=False, allow_none=True)
+    photo = fields.String(required=False, allow_none=True)
 
-class UpdateHadwareDeviceIdInputSchema(Schema):
     
-    hardware_device_id = fields.Str(required=True)

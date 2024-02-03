@@ -19,8 +19,7 @@ class LoginResource(Resource):
 class LogoutResource(Resource):
     @staticmethod
     def post()  ->  Response:
-        input_data = request.get_json()
-        response , status = logout(request,input_data)
+        response , status = logout(request)
         return make_response(response, status)
     
 class RefreshTokenResource(Resource):
