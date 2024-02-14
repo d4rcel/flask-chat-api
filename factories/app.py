@@ -4,8 +4,7 @@ from flask_restful import Api
 from config import Config
 from db import mongodb_client
 from app.http.resources.login.login_resource import LoginResource, LogoutResource, RefreshTokenResource
-# from app.http.resources.register.register_resource import CheckUsernameResource, CheckEmailResource, RegisterResource
-# from app.http.resources.sms.sms_resource import SendSMSResource
+from app.http.resources.contacts.contact_resource import ContactsResource, ContactResource
 from app.http.resources.users.user_resource import  UserResource
 from app.http.resources.home.home_resource import HomeResource
 from app.exceptions.handler import handle_404_error, handle_500_error
@@ -78,17 +77,11 @@ def create_app() -> Flask:
     
     api.add_resource(RefreshTokenResource,'/api/refresh')
     
-    # api.add_resource(SendSMSResource,'/api/send/sms')
+    api.add_resource(ContactsResource,'/api/contacts')
     
-    # api.add_resource(SendResetPasswordCodeResource,'/api/send/reset/password/code')
-
-    # api.add_resource(CheckResetPasswordCodeResource,'/api/check/reset/password/code')
+    api.add_resource(ContactResource,'/api/contacts/<string:contact_id>')
     
     # api.add_resource(ResetPasswordResource,'/api/reset/password')
-
-    # api.add_resource(UpdateNoticifactionDeviceIdResource,'/api/update/notification/device/id')
-
-    # api.add_resource(UpdateUserHadwareDeviceIdResource,'/api/update/user/hardaware/device/id')
 
     @app.errorhandler(404)
     def handle(e):

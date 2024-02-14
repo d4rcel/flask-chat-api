@@ -11,3 +11,14 @@ class User(Document):
     password = StringField(max_length=200, required=True)
     status = StringField()
     photoUrl = StringField()
+    
+    def to_json(self):
+        
+        return {
+            '_id': str(self._id),
+            'firstname' : self.firstname,
+            'lastname' : self.lastname,
+            'email' : self.email,
+            'photoUrl' : self.photoUrl,
+            'status' :  self.status,
+        }

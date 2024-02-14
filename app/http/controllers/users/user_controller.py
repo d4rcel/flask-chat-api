@@ -8,7 +8,6 @@ from flask_bcrypt import generate_password_hash
 from flask_jwt_extended import current_user
 from flask_jwt_extended import jwt_required
 
-@jwt_required()
 def create_user(request, input_data):
     """
     It use for register a new user
@@ -36,8 +35,7 @@ def create_user(request, input_data):
             password = generate_password_hash(input_data.get('password')).decode("utf8"),
             photoUrl = None,
             status = None
-        )  
-        user.save()
+        ).save()
                             
         return generate_response(
             data=user, message="User Created", status=HTTP_201_CREATED
