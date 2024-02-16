@@ -15,6 +15,8 @@ def post(request, input_data):
         validator = CreateContactSchema()
         errors = validator.validate(input_data)
         
+        if errors:
+            return generate_response(message=errors) 
          
         contact = Contact.objects.filter(
             mongodb_client.Q(
@@ -71,9 +73,6 @@ def get(request, input_data):
             status=input_data.get('status')
         )
         
-        print(contacts)
-
-        
         for contact in contacts:
             data.append(contact.to_json())
     else:
@@ -94,6 +93,8 @@ def patch(contact_id, input_data):
         validator = UpdateContactSchema()
         errors = validator.validate(input_data)
         
+        if errors:
+            return generate_response(message=errors) 
         
         if input_data.get('action') == 'ANSWER_TO_REQUEST':
     
@@ -145,7 +146,6 @@ def delete(contact_id):
         return generate_response(
             data=contact, message="Contact deleted successfully.", status=HTTP_200_OK
         )
-    
     except Exception as e:
         
         error_message =  str(e)

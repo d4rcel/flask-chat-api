@@ -7,6 +7,7 @@ from app.http.resources.login.login_resource import LoginResource, LogoutResourc
 from app.http.resources.contacts.contact_resource import ContactsResource, ContactResource
 from app.http.resources.users.user_resource import  UserResource
 from app.http.resources.home.home_resource import HomeResource
+from app.http.resources.discussions.discussion_resource import DiscussionsResource, DiscussionResource
 from app.exceptions.handler import handle_404_error, handle_500_error
 from redis_client import jwt_redis_blocklist
 from datetime import timedelta
@@ -80,6 +81,12 @@ def create_app() -> Flask:
     api.add_resource(ContactsResource,'/api/contacts')
     
     api.add_resource(ContactResource,'/api/contacts/<string:contact_id>')
+    
+    api.add_resource(DiscussionsResource,'/api/discussions')
+    
+    api.add_resource(DiscussionResource,'/api/discussions/<string:discussion_id>')
+
+    
     
     # api.add_resource(ResetPasswordResource,'/api/reset/password')
 
