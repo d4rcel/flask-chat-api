@@ -10,7 +10,8 @@ class Message(Document):
     discussionId = ObjectIdField()
     responseToMsgId = ObjectIdField(default=None)
     reactions = ListField(DictField())
-    file = DictField(default=None)
+    # file = DictField(default=None)
+    type = StringField()
     createdAt = FloatField()
     
 

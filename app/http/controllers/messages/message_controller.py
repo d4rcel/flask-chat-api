@@ -23,7 +23,8 @@ def post(request, input_data):
             discussionId = input_data.get('discussion_id'),
             senderId = ObjectId(current_user._id),
             createdAt = datetime.utcnow().timestamp(),
-            surveyId = input_data.get('survey_id') if   input_data.get('survey_id') else None
+            surveyId = input_data.get('survey_id') if   input_data.get('survey_id') else None,
+            type = input_data.get('type')
         )
         
         message.save()

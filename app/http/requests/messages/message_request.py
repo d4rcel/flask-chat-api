@@ -8,6 +8,7 @@ class SendMessageSchema(Schema):
     discussion_id = fields.String(required=True, validate=[validate_discussion])
     response_to_msg_id = fields.String(required=False, validate=[validate_message])
     survey_id = fields.String(required=False)
+    type = fields.String(required=True, validate=validate.OneOf(['Text','File']))
 
 class ReactionToMessageSchema(Schema):
     

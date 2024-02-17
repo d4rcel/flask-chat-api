@@ -7,6 +7,7 @@ import random
 from flask_bcrypt import generate_password_hash
 from flask_jwt_extended import current_user
 from flask_jwt_extended import jwt_required
+from flask_bcrypt import check_password_hash
 
 def create_user(request, input_data):
     """
@@ -50,7 +51,7 @@ def create_user(request, input_data):
         )
     
 @jwt_required()
-def edit_user(request,input_data):
+def patch(request,input_data):
     
     valiator = EditUserSchema()
     errors = valiator.validate(input_data)
@@ -58,21 +59,36 @@ def edit_user(request,input_data):
     if errors:
         return generate_response(message=errors) 
         
-    user = User.objects(email=input_data.get('email')).first()
+    if input_data.get('action') == 'UPDATE_INFOS':
+        
+        user = User.objects(email=input_data.get('email')).first()
+                
+        if user and user._id != current_user._id:
+            
+            message = "Email already exists"
+            return generate_response(message=message, status=HTTP_400_BAD_REQUEST)
+            
+        User.objects(email=current_user.email).update(
+            firstname = input_data.get('firstname') if  input_data.get('firstname')  else current_user.firstname,
+            lastname =input_data.get('lastname') if input_data.get('lastname') else current_user.lastname,
+            email = input_data.get('email') if input_data.get('email') else current_user.email,
+            photoUrl = None,
+            status = input_data.get('status') if input_data.get('status') else current_user.status
+        )
+        
     
-    if user and user._id != current_user._id:
+    if input_data.get('action') == 'CHANGE_PASSWORD':
         
-        message = "Email already exists"
-        return generate_response(message=message, status=HTTP_400_BAD_REQUEST)
+        if check_password_hash(current_user.password,input_data.get("current_password")):        
+            
+            User.objects(email=current_user.email).update(
+                password = generate_password_hash(input_data.get('new_password')).decode("utf8")
+            )
+        else:
+            return generate_response(
+                message="Password is wrong", status=HTTP_400_BAD_REQUEST
+            )
         
-    User.objects(email=current_user.email).update(
-        firstname = input_data.get('firstname') if  input_data.get('firstname')  else current_user.firstname,
-        lastname =input_data.get('lastname') if input_data.get('lastname') else current_user.lastname,
-        email = input_data.get('email') if input_data.get('email') else current_user.email,
-        photoUrl = None,
-        status = input_data.get('status') if input_data.get('status') else current_user.status
-    )
-
     return generate_response(
         data={}, message="Update Succed", status=HTTP_200_OK
     )

@@ -25,8 +25,10 @@ class EditUserSchema(Schema):
     
     firstname = fields.String(required=False,validate=validate.Length(min=1,max=255))
     lastname = fields.String(required=False,validate=validate.Length(max=255))
-    email = fields.Email(required=True)
+    email = fields.Email(required=False)
     status = fields.String(required=False, allow_none=True)
     photo = fields.String(required=False, allow_none=True)
+    action = fields.String(required=True, validate=validate.OneOf(['UPDATE_INFOS','CHANGE_PASSWORD']))
 
-    
+    current_password = fields.String(required=False, allow_none=True)
+    new_password = fields.String(required=False, allow_none=True)

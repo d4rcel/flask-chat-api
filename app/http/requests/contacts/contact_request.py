@@ -1,9 +1,9 @@
 from marshmallow import Schema, fields, validate
-from app.rules.validate import validate_contact
+from app.rules.validate import validate_contact,validate_user
 
 class CreateContactSchema(Schema):
     
-    user2Id  = fields.String(required = True, validate=[validate_contact])
+    user2Id  = fields.String(required = True, validate=[validate_user])
 
 class UpdateContactSchema(Schema):
 
@@ -14,6 +14,6 @@ class UpdateContactSchema(Schema):
 class ContactSchema(Schema):
 
     status = fields.String(required=True, validate=validate.OneOf(['PENDING','VALIDATED']))
-    user1Id  = fields.String(required = True, validate=[validate_contact])
-    user2Id  = fields.String(required = True, validate=[validate_contact])
+    user1Id  = fields.String(required = True, validate=[validate_user])
+    user2Id  = fields.String(required = True, validate=[validate_user])
 

@@ -69,8 +69,9 @@ def get(request, input_data):
 
     if input_data.get('status'):
         contacts = Contact.objects(
-            # mongodb_client.Q(firstname__icontains=input_data.get('search')) |
-            status=input_data.get('status')
+            mongodb_client.Q(status=input_data.get('status')) |
+            mongodb_client.Q(user1Id=current_user._id,user1IdBlocked=False) |
+            mongodb_client.Q(user2Id=current_user._id, user2IdBlocked=False) 
         )
         
         for contact in contacts:
