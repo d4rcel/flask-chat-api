@@ -1,4 +1,6 @@
 from app.utils.http_code import HTTP_200_OK, HTTP_201_CREATED
+import secrets
+import string
 
 def generate_response(data=None, message=None, status=400):
     """
@@ -99,3 +101,9 @@ def request_to_json(request, status, input_data=None, message=None, response_dat
     }
     
     return data
+
+def generate_random_string(length=10):
+    alphabet = string.ascii_letters + string.digits
+    return ''.join(secrets.choice(alphabet) for _ in range(length))
+
+# Example: Generate a random string of length 12

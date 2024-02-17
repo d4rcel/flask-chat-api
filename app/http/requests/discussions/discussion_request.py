@@ -27,6 +27,3 @@ class UpdateDiscussionSchema(Schema):
     is_archived = fields.Boolean(required=False)
     is_muted = fields.Boolean(required=False)
     remove_users = fields.List(fields.String(required=True, validate=[validate_user]))
-
-
-    

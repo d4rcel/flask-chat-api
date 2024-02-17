@@ -1,4 +1,4 @@
-from app.models.discussions.discussion_model import Discussion, Member
+from app.models.discussions.discussion_model import Discussion
 from app.utils.common import generate_response
 from app.http.requests.discussions.discussion_request import CreateGroupDiscussionSchema, UpdateDiscussionSchema, DiscussionSchema
 from app.utils.http_code import HTTP_200_OK, HTTP_400_BAD_REQUEST,HTTP_401_UNAUTHORIZED, HTTP_201_CREATED

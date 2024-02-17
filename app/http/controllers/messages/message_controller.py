@@ -1,11 +1,10 @@
 from app.models.messages.message_model import Message, Survey
 from app.utils.common import generate_response
 from app.http.requests.messages.message_request import SendMessageSchema, ReactionToMessageSchema,MessageSchema
-from app.utils.http_code import HTTP_200_OK, HTTP_400_BAD_REQUEST,HTTP_401_UNAUTHORIZED, HTTP_201_CREATED
+from app.utils.http_code import HTTP_200_OK, HTTP_400_BAD_REQUEST, HTTP_201_CREATED
 from datetime import datetime
 from flask_jwt_extended import current_user
 from flask_jwt_extended import jwt_required
-from db import mongodb_client
 from bson import ObjectId
 
 @jwt_required()
@@ -39,7 +38,6 @@ def post(request, input_data):
         return generate_response(
             message=error_message, status=HTTP_200_OK
         )
-
 
 @jwt_required()
 def patch(message_id, input_data):

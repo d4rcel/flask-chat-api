@@ -18,8 +18,9 @@ class Survey(Document):
     
     meta = {'collection': 'surveys'}
     _id = ObjectIdField()
+    discussionId = ObjectIdField()
     question = StringField()
     creatorId = ObjectIdField()
     createdAt = FloatField()
     endedAt = FloatField()
-    options = ListField(DictField)
+    options = ListField(DictField())
