@@ -2,8 +2,7 @@ from mongoengine import Document, IntField, ObjectIdField, BooleanField, EnumFie
 
 class Member(Document):
     
-    # meta = {'collection': 'members'}
-    # _id = ObjectIdField()
+ 
     userID = ObjectIdField()
     isPined = BooleanField(default=False)
     isMuted = BooleanField(default=False)
@@ -25,14 +24,4 @@ class Discussion(Document):
     photoUrl  = StringField(default=None)
     updatedAt = FloatField(default=None)
     members = ListField(DictField())
-    # members  = ListField(
-    #     {
-    #         'userID': ObjectIdField(),
-    #         'isPined': BooleanField(default=False),
-    #         'isMuted': BooleanField(default=False),
-    #         'field': BooleanField(default=False),
-    #         'isArchived': BooleanField(default=False),
-    #         'addedAt': FloatField()
-    #     }
-    # )
     # status = EnumField(enum=['PENDING', 'VALIDATED', 'DECLINED'])

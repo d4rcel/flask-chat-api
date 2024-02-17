@@ -6,7 +6,7 @@ from bson.objectid import ObjectId
 from app.models.contacts.contact_model import Contact
 from app.models.discussions.discussion_model import Discussion
 from app.models.users.user_model import User
-
+from app.models.messages.message_model import Message
 def validate_link(n):
     if urlparse(n).netloc in  Config.BLOCKED_LINKS:
         raise ValidationError("This link is blocked in our app.")
@@ -48,3 +48,13 @@ def validate_discussion(discussion_id):
             raise ValidationError('Discussion doesn\'t not exist in our system')
     except :
         raise ValidationError('Discussion doesn\'t not exist in our system')
+
+
+def validate_message(message_id):
+    try:
+        id = ObjectId(message_id) 
+        message =  Message.objects(_id=message_id).first()
+        if message is None:
+            raise ValidationError('Message doesn\'t not exist in our system')
+    except :
+        raise ValidationError('Message doesn\'t not exist in our system')
